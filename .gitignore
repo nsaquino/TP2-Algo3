@@ -31,9 +31,9 @@
 *.out
 *.app
 #Specific binary files
-ej1
-ej2
-ej3
+.ej1/ej1
+.ej2/ej2
+.ej3/ej3
 
 # Config files
 .idea/
