@@ -32,6 +32,8 @@
 *.app
 #Specific binary files
 ej1
+ej2
+ej3
 
 # Config files
 .idea/
