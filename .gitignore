@@ -30,6 +30,8 @@
 *.exe
 *.out
 *.app
+#Specific binary files
+ej1
 
 # Config files
 .idea/
