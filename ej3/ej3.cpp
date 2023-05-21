@@ -2,13 +2,12 @@
 #include <vector>
 #include <list>
 #include <tuple>
-#include <algorithm>
-#include <bits/stdc++.h>
+#include <algorithm>        //sort()
+#include <bits/stdc++.h>    //sqrt(), pow()
 
 using namespace std;
 
 using ll = long long;
-const ll inf = 1e18;
 
 /*
     N = cantidad de oficinas
@@ -23,14 +22,12 @@ const ll inf = 1e18;
 int N, R, W, U, V;
 
 vector<pair<ll,ll>> coord_oficina; //Indexamos las oficinas
-vector<vector<ll>> G_dist; //Matriz de adyacencia
 vector<tuple<double,ll,ll>> G_E; //Vector de aristas: (d, i, j),donde la distancia
                                  //                   entre las oficinas i y j es d
 
 /*******Debug********/
-void print_oficinas();
-void print_edge_list();
-void print_matrix();
+// void print_oficinas();
+// void print_edge_list();
 /*******Debug********/
 
 struct DSU{
@@ -82,12 +79,11 @@ double distancia(pair<ll, ll> a, pair<ll, ll> b) { //Distancia euclidiana
     return sqrt(double(pow(b.first - a.first, 2) + pow(b.second - a.second, 2)));
 }
 
-int main(int argc, char *argv[]) {
+int main() {
     int C; cin >> C; //C = casos de tests
     for (int c = 1; c <= C; c++) {
         cin >> N >> R >> W >> U >> V;
 
-        //G_dist.assign(N, vector<ll>(N,0)); 
         coord_oficina = vector<pair<ll, ll>>(N); //Asignamos un indice a las oficinas
         G_E.clear(); //Preparamos la lista de aristas
 
@@ -100,64 +96,50 @@ int main(int argc, char *argv[]) {
             for (int j = i+1; j < N; j++) {
                 double dist = distancia(coord_oficina[i], coord_oficina[j]);
                 G_E.push_back(make_tuple(dist, i, j));
-                //G_dist[i][j] = G_dist[j][i] = dist;
             }
         }
 
         auto [UTP, fibra] = kruskal();
         cout << "Caso #" << c << ": ";
-        cout << fixed << setprecision(3);
+        cout << fixed << setprecision(3); //fixed hace que aparezcan los .000
         cout << UTP << " " << fibra << endl;
 
         //Debug
         //cout << "Caso #" << c << ":" << endl;
         //print_oficinas();
         //print_edge_list();
-        //print_matrix();
-        
     }
     
     return 0;
 }
 
 /*******Debug********/
-void print_matrix(){
-    cout << "\tDistancias:" << endl;
-    for (int i = 0; i < N; i++) {
-        cout << "\t\t";
-        for (int j = 0; j < N; j++) {
-            cout << G_dist[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
+// void print_oficinas(){
+//     cout << "\tOficinas:" << endl;
+//     for (int i = 0; i < N; i++) {
+//         cout << "\t\t" << i << ": (";
+//         cout << coord_oficina[i].first << ", " << coord_oficina[i].second;
+//         cout << ")" << endl;
+//     }
+// }
 
-void print_oficinas(){
-    cout << "\tOficinas:" << endl;
-    for (int i = 0; i < N; i++) {
-        cout << "\t\t" << i << ": (";
-        cout << coord_oficina[i].first << ", " << coord_oficina[i].second;
-        cout << ")" << endl;
-    }
-}
+// void print_edge_list(){
+//     //Lista de aristas
+//     cout << "\tDistancias:" << endl;
+//     cout << "\t\tSin ordenar:" << endl;
+//     cout << "\t\t{";
+//     for (int i = 0; i < G_E.size(); i++) {
+//         auto [d,u,v] = G_E[i];
+//         cout << "(" << d << "," << u << "," << v << "), ";
+//     }
+//     cout << "}" << endl;
 
-void print_edge_list(){
-    //Lista de aristas
-    cout << "\tDistancias:" << endl;
-    cout << "\t\tSin ordenar:" << endl;
-    cout << "\t\t{";
-    for (int i = 0; i < G_E.size(); i++) {
-        auto [d,u,v] = G_E[i];
-        cout << "(" << d << "," << u << "," << v << "), ";
-    }
-    cout << "}" << endl;
-
-    sort(G_E.begin(), G_E.end());
-    cout << "\t\tOrdenado:" << endl;
-    cout << "\t\t{";
-    for (int i = 0; i < G_E.size(); i++) {
-        auto [d,u,v] = G_E[i];
-        cout << "(" << d << "," << u << "," << v << "), ";
-    }
-    cout << "}" << endl;
-}
+//     sort(G_E.begin(), G_E.end());
+//     cout << "\t\tOrdenado:" << endl;
+//     cout << "\t\t{";
+//     for (int i = 0; i < G_E.size(); i++) {
+//         auto [d,u,v] = G_E[i];
+//         cout << "(" << d << "," << u << "," << v << "), ";
+//     }
+//     cout << "}" << endl;
+// }
