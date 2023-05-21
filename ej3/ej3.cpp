@@ -3,6 +3,7 @@
 #include <list>
 #include <tuple>
 #include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ int N, R, W, U, V;
 
 vector<pair<ll,ll>> coord_oficina; //Indexamos las oficinas
 vector<vector<ll>> G_dist; //Matriz de adyacencia
-vector<tuple<ll,ll,ll>> G_E; //Vector de aristas: (d, i, j),donde la distancia
+vector<tuple<double,ll,ll>> G_E; //Vector de aristas: (d, i, j),donde la distancia
                                  //                   entre las oficinas i y j es d
 
 /*******Debug********/
@@ -32,8 +33,53 @@ void print_edge_list();
 void print_matrix();
 /*******Debug********/
 
-int distancia(pair<ll, ll> a, pair<ll, ll> b) { //Distancia Manhattan
-    return abs(a.first - b.first) + abs(a.second - b.second);
+struct DSU{
+
+    DSU(int n){
+        padre = rank = vector<int>(n);
+        for(int v = 0; v < n; v++) padre[v] = v;
+    }
+
+    int find(int v){
+        if(v == padre[v]) return v;
+        return padre[v] = find(padre[v]);
+    }
+
+    void unite(int u, int v){
+        u = find(u), v = find(v);
+        if(u == v) return;
+        if(rank[u] < rank[v]) swap(u,v);
+        padre[v] = padre[u];
+        rank[u] = max(rank[u],rank[v]+1);
+    }
+
+    vector<int> padre;
+    vector<int> rank;
+};
+
+pair<double, double> kruskal() {
+    sort(G_E.begin(),G_E.end());
+    double UTP, fibra = 0;
+    int cc = N; //Componentes conexas (1 modem por cada cc)
+    DSU dsu(N);
+    for(auto [d,u,v] : G_E){
+        if(cc == W) break; //Tenemos las conexiones, agregamos un modem en cada cc y listo
+        //si (u,v) es arista segura
+        if(dsu.find(u) != dsu.find(v)){
+            // unir oficinas con cable
+            dsu.unite(u,v);
+            cc--;
+            if (d <= double(R)) //Si no se pasa de R cm, usar cable UTP
+                UTP += (d * double(U));
+            else //Si esta a distancia mayor a R, usar fibra optica
+                fibra += (d * double(V));
+        }
+    }
+    return make_pair(UTP, fibra);
+}
+
+double distancia(pair<ll, ll> a, pair<ll, ll> b) { //Distancia euclidiana
+    return sqrt(double(pow(b.first - a.first, 2) + pow(b.second - a.second, 2)));
 }
 
 int main(int argc, char *argv[]) {
@@ -52,17 +98,22 @@ int main(int argc, char *argv[]) {
 
         for (int i = 0; i < N; i++) {
             for (int j = i+1; j < N; j++) {
-                ll dist = distancia(coord_oficina[i], coord_oficina[j]);
+                double dist = distancia(coord_oficina[i], coord_oficina[j]);
                 G_E.push_back(make_tuple(dist, i, j));
                 //G_dist[i][j] = G_dist[j][i] = dist;
             }
         }
 
+        auto [UTP, fibra] = kruskal();
+        cout << "Caso #" << c << ": ";
+        cout << fixed << setprecision(3);
+        cout << UTP << " " << fibra << endl;
+
         //Debug
-        // cout << "Caso #" << c << ":" << endl;
-        // print_oficinas();
-        // print_edge_list();
-        // print_matrix();
+        //cout << "Caso #" << c << ":" << endl;
+        //print_oficinas();
+        //print_edge_list();
+        //print_matrix();
         
     }
     
@@ -96,8 +147,8 @@ void print_edge_list(){
     cout << "\t\tSin ordenar:" << endl;
     cout << "\t\t{";
     for (int i = 0; i < G_E.size(); i++) {
-        tuple<ll,ll,ll> e = G_E[i];
-        cout << "(" << get<0>(e) << "," << get<1>(e) << "," << get<2>(e) << "), ";
+        auto [d,u,v] = G_E[i];
+        cout << "(" << d << "," << u << "," << v << "), ";
     }
     cout << "}" << endl;
 
@@ -105,8 +156,8 @@ void print_edge_list(){
     cout << "\t\tOrdenado:" << endl;
     cout << "\t\t{";
     for (int i = 0; i < G_E.size(); i++) {
-        tuple<ll,ll,ll> e = G_E[i];
-        cout << "(" << get<0>(e) << "," << get<1>(e) << "," << get<2>(e) << "), ";
+        auto [d,u,v] = G_E[i];
+        cout << "(" << d << "," << u << "," << v << "), ";
     }
     cout << "}" << endl;
 }
