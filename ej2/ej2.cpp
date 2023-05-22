@@ -1,39 +1,93 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <stack>
 
 using namespace std;
 
-vector<list<uint>> adj; //Lista de adyacencias
+int n, m;       //n = cant. piezas
+vector<list<int>> D; //Lista de adyacencias
+vector<list<int>> D_T; //Grafo D con aristas invertidas
+
+enum {BLANCO, GRIS, NEGRO};
+vector<int> color;
+stack<int> S;
+
+void dfs1(int u){
+    color[u] = GRIS;
+    for (list<int>::iterator it = D[u].begin(); it != D[u].end(); it++)
+    {
+        int v = *it;
+        if (color[v] == BLANCO)
+            dfs1(v);
+    }
+    color[u] = NEGRO;
+    S.push(u);
+}
+
+void dfs2(int u){
+    color[u] = GRIS;
+    for (list<int>::iterator it = D_T[u].begin(); it != D_T[u].end(); it++)
+    {
+        int v = *it;
+        if (color[v] == BLANCO)
+            dfs2(v);
+    }
+    color[u] = NEGRO;
+}
+
+int kosaraju(){
+    //Paso 1
+    color = vector<int>(n, BLANCO);
+    for (int i = 0; i < n; i++) {
+        if (color[i] == BLANCO) {
+            dfs1(i);
+        }
+    }
+    //Paso 2
+    int cc = 0;
+    color = vector<int>(n, BLANCO);
+    while (!S.empty())
+    {
+        int u = S.top(); S.pop();
+        if (color[u] == BLANCO) {
+            dfs2(u);
+            cc++;
+        }
+    }
+    return cc;
+}
 
 int main(int argc, char *argv[]){
-    int n, m;       //n = cant. piezas
     cin >> n >> m;  //m = cant. pares de caída
 
     //Init adjacency list
-    adj = vector<list<uint>>(n + 1); //Piezas de 1 a n
-    for (uint i = 1; i <= n; i++)
-        adj[i] = list<uint>(); //Inicializa lista vacía
-    
+    D = vector<list<int>>(n); //Piezas de 0 a n-1
+    D_T = vector<list<int>>(n); 
+    for (int i = 0; i < n; i++){
+        D[i] = list<int>(); //Inicializa lista vacía
+        D_T[i] = list<int>(); //Inicializa lista vacía
+    }
+
     while (m--) { //Agregamos los pares de caída
-        uint i, j;
+        int i, j;
         cin >> i >> j; // (i,j) = par de caída
-        adj[i].push_back(j); //Digrafo?
+        D[i].push_back(j);  //Digrafo
+        D_T[j].push_back(i);//Digrafo al revés
     }
 
     //Debug
     /*
-    cout << 0 << ": UNUSED" << endl;
-    for (uint i = 1; i < adj.size(); i++){
-        cout << i << ": { ";
-        list<uint>::iterator it;
-        for(it = adj[i].begin(); it != adj[i].end(); it++){
-            cout << *it << " ";
+    for (int i = 0; i < D.size(); i++){
+        cout << i + 1 << ": { ";
+        list<int>::iterator it;
+        for(it = D[i].begin(); it != D[i].end(); it++){
+            cout << (*it) + 1 << " ";
         }
         cout << "}" << endl;
     }*/
 
-    //TODO: Resolver el ejercicio T_T
+    kosaraju();
 
     return 0;
 }

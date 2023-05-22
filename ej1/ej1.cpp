@@ -22,6 +22,7 @@ int main(int argc, char *argv[]){
         adj[v].push_back(u);
     }
 
+
     //Debug
     /*
     cout << 0 << ": UNUSED" << endl;
