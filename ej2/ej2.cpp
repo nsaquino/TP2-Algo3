@@ -67,8 +67,8 @@ void dfs_topo(int u, vector<int> &top_sorted, int &orden){
     S.push(u);
     for (list<int>::iterator it = D[u].begin(); it != D[u].end(); it++)
     {
-        int v = *it;        
-        if (!visitado[v] && cfc[v] != v)    //si no fue visit, y no toque su cfc, le aplico dfs_topo
+        int v = cfc[*it];        
+        if (!visitado[v])    // && cfc[v] != cfc[u] si no fue visit, y no toque su cfc, le aplico dfs_topo
             dfs_topo(v, top_sorted, orden);
     }
     top_sorted[orden] = S.top();
@@ -89,13 +89,10 @@ void topological_sort(){
     cfc_D = top_sorted; //cfc_D está ordenado topologicamente
 }
 
-
-
-vector<bool> visited;
 vector<int> res_temp;
 
 void dfs_sorted(int u){
-    visited[u] = true;
+    visitado[u] = true;
     for (list<int>::iterator it = D[u].begin(); it != D[u].end(); it++)
     {
         int v = *it;        
@@ -105,11 +102,11 @@ void dfs_sorted(int u){
 }
 
 void last_dfs(){
-    visited = vector<bool>(n,false);
+    visitado = vector<bool>(n, false);
     for(int i = 0; i < cfc_D.size(); i++){
-            if(visited[i]!=true){                
-                dfs_sorted(i);
-                res_temp.push_back(i);
+            if(!visitado[cfc_D[i]]){                
+                dfs_sorted(cfc_D[i]);
+                res_temp.push_back(cfc_D[i]);
         }
     }
 }
@@ -129,8 +126,8 @@ int main(int argc, char *argv[]){
     while (m--) { //Agregamos los pares de caída
         int i, j;
         cin >> i >> j; // (i,j) = par de caída
-        D[i].push_back(j);  //Digrafo
-        D_T[j].push_back(i);//Digrafo al revés
+        D[i-1].push_back(j-1);  //Digrafo
+        D_T[j-1].push_back(i-1);//Digrafo al revés
     }
 
     //Debug
@@ -154,7 +151,7 @@ int main(int argc, char *argv[]){
     cout << res_temp.size() << endl;
     //Imprimir de a 1 los elementos de res_temp
     for (int i = 0; i < res_temp.size(); i++){
-        cout << res_temp[i] + 1;
+        cout << res_temp[i] + 1 << " ";
     }
     cout << endl;
 
