@@ -64,16 +64,17 @@ void kosaraju(){
 
 void dfs_topo(int u, vector<int> &top_sorted, int &orden){
     visitado[u] = true;
-    S.push(u);
-    for (list<int>::iterator it = D[u].begin(); it != D[u].end(); it++)
-    {
-        int v = cfc[*it];        
+    if (cfc[u] == u) S.push(u);
+    for (list<int>::iterator it = D[u].begin(); it != D[u].end(); it++) {
+        int v = *it;        
         if (!visitado[v])    // && cfc[v] != cfc[u] si no fue visit, y no toque su cfc, le aplico dfs_topo
             dfs_topo(v, top_sorted, orden);
     }
-    top_sorted[orden] = S.top();
-    S.pop();
-    orden--;
+    if (cfc[u] == u) {
+        top_sorted[orden] = S.top();
+        S.pop();
+        orden--;
+    }
 }
 
 void topological_sort(){
