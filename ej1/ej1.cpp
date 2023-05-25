@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <list>
 
 using ll = long long;
 using namespace std;
 
-vector<list<uint>> adj; //Lista de adyacencias
+int N, M;       //n = cant. vertices, m = cant. aristas
+vector<vector<int>> adj; //Lista de adyacencias
 
 ll combinatoria_aux(vector<vector<ll>> &dp, ll n, ll k){
     if (n < 0 || k < 0 || k > n) return 0;
@@ -25,40 +25,31 @@ ll combinatoria(ll n, ll k) {
 }
 
 int main(int argc, char *argv[]){
-
     // //Debug combinatoria
     // int N, K; cin >> N >> K;
     // cout << combinatoria(N,K) << endl;
     // return 0;
 
-    int n, m;       //n = cant. vertices
-    cin >> n >> m;  //m = cant. aristas
+    cin >> N >> M;  
 
-    //Añadir vertices (Init adjacency list)
-    adj = vector<list<uint>>(n+1); //El vertice 0 no lo usamos
-    for (uint i = 1; i <= n; i++)
-        adj[i] = list<uint>(); //Inicializa lista vacía
-    
-    while (m--) { //Agregamos las aristas
-        uint u, v;
+    //Init adjacency list
+    adj = vector<vector<int>>(N, vector<int>());
+    while (M--) {
+        int u, v;
         cin >> u >> v; // (u,v) = arista
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u-1].push_back(v-1);
+        adj[v-1].push_back(u-1);
     }
 
-
-    //Debug
-    /*
-    cout << 0 << ": UNUSED" << endl;
-    for (uint i = 1; i < adj.size(); i++){
-        cout << i << ": { ";
-        list<uint>::iterator it;
-        for(it = adj[i].begin(); it != adj[i].end(); it++){
-            cout << *it << " ";
-        }
-        cout << "}" << endl;
-    }*/
     //TODO: Resolver el ejercicio T_T
+
+    // //Debug
+    // for (int i = 0; i < adj.size(); i++) {
+    //     cout << i + 1 << ": { ";
+    //     for(int j = 0; j < adj[i].size(); j++)
+    //         cout << adj[i][j] + 1 << " ";
+    //     cout << "}" << endl;
+    // }
 
     return 0;
 }
