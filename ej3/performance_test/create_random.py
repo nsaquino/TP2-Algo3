@@ -16,7 +16,7 @@ for pow in range (1,3): #[1,2)
     print(final_path + "/input_" + str(n)) ####debug####
     
     R = np.random.randint(1, 10001)
-    W = np.random.randint(1, n)
+    W = 1 #1 modem
     U = np.random.randint(1, 11)
     V = np.random.randint(U, 11)
     f.write(str(n) + ' ' + str(R) + ' ' + str(W) + ' ' + str(U) + ' ' + str(V) + "\n")
