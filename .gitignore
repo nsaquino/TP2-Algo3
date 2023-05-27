@@ -32,9 +32,15 @@
 *.app
 #Specific binary files
 ej1/ej1
+ej1/bridges/bridges
 ej2/ej2
 ej2/ej0-kosaraju/trust_groups
 ej3/ej3
+
+#Archivos de experimentación
+inputs/
+output/
+ej3_perf_test
 
 # Config files
 .idea/
