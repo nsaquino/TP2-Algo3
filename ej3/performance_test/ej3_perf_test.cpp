@@ -36,10 +36,10 @@ double distancia(pair<ll, ll> a, pair<ll, ll> b) { //Distancia euclidiana
     return sqrt(double(pow(b.first - a.first, 2) + pow(b.second - a.second, 2)));
 }
 
-void read_input(int size) {
+void read_input(int size, int k) {
     //Buscamos el input correspondiente
     string file_name = dir_path + "inputs/input_" + to_string(size);
-    cout << file_name << endl;
+    cout << "input_" << size << "\t" << k+1 << "/7" << endl;
     ifstream read_file(file_name); /*abre para leer*/
     
     read_file >> N >> R >> W >> U >> V;
@@ -125,14 +125,14 @@ int main() {
     
         ofstream output_file;
         output_file.open(dir_path + output_name[k]);
-        cout << dir_path + output_name[k] << endl;
+        cout << output_name[k] << endl;
         output_file << "n,time\n";
 
         // for (int power = 1; power < 3; power++) {
         //     for (int i=2; i <= 10; i++) {
             for (int n=10; n <= 1000; n += 10) {
         //        int n = i * pow(10,power);
-                read_input(n);
+                read_input(n, k);
 
                 double counter = 0;
 

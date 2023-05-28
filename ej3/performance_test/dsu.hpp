@@ -21,7 +21,7 @@ struct DSU_noOptimization{
     void unite(int u, int v){
         u = find(u), v = find(v);
         if(u == v) return;
-        padre[v] = padre[u];
+        padre[v] = u;
     }
 
     vector<int> padre;
@@ -42,7 +42,7 @@ struct DSU_onlyPathCompression{
     void unite(int u, int v){
         u = find(u), v = find(v);
         if(u == v) return;
-        padre[u] = padre[v];
+        padre[u] = v;//padre[v];
     }
 
     vector<int> padre;
