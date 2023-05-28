@@ -1,7 +1,7 @@
 import numpy as np  ##/*ctrl+p luego -> Python: Select Interpreter -> Python 3.10.6
 import os
 
-np.random.seed(1337)
+#np.random.seed(1337)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 final_path = os.path.join(dir_path, 'inputs')
@@ -9,16 +9,17 @@ if not os.path.exists(final_path):
    os.makedirs(final_path)
 
 
-for pow in range (1,3): #[1,2)
-  for x in range(2,11): #[2,10)
-    n = x * (10**pow)
+#for pow in range (1,3): #[1,2)
+#  for x in range(2,11): #[2,10)
+for n in range (10, 1001, 10):
+#    n = x * (10**pow)
     f = open(final_path + "/input_" + str(n), "w")
     print(final_path + "/input_" + str(n)) ####debug####
     
     R = np.random.randint(1, 10001)
-    W = 1 #1 modem
+    W = 1 #1 solo modem para que kruskal arme todo el árbol
     U = np.random.randint(1, 11)
-    V = np.random.randint(U, 11)
+    V = np.random.randint(U, 11) #U <= V
     f.write(str(n) + ' ' + str(R) + ' ' + str(W) + ' ' + str(U) + ' ' + str(V) + "\n")
 
     oficinas = set()

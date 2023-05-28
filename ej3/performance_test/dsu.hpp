@@ -42,7 +42,7 @@ struct DSU_onlyPathCompression{
     void unite(int u, int v){
         u = find(u), v = find(v);
         if(u == v) return;
-        padre[v] = padre[u];
+        padre[u] = padre[v];
     }
 
     vector<int> padre;
