@@ -90,8 +90,6 @@ void topological_sort(){
     cfc_D = top_sorted; //cfc_D está ordenado topologicamente
 }
 
-vector<int> res_temp;
-
 void dfs_sorted(int u){
     visitado[u] = true;
     for (list<int>::iterator it = D[u].begin(); it != D[u].end(); it++)
@@ -102,12 +100,12 @@ void dfs_sorted(int u){
     }
 }
 
-void last_dfs(){
+void last_dfs(vector<int>& res){
     visitado = vector<bool>(n, false);
     for(int i = 0; i < cfc_D.size(); i++){
             if(!visitado[cfc_D[i]]){                
                 dfs_sorted(cfc_D[i]);
-                res_temp.push_back(cfc_D[i]);
+                res.push_back(cfc_D[i]);
         }
     }
 }
@@ -134,13 +132,13 @@ int main(int argc, char *argv[]){
     topological_sort();
 
     vector<int> res;
-    last_dfs();
+    last_dfs(res);
 
-    //Imprimir tamaño de res_temp
-    cout << res_temp.size() << endl;
-    //Imprimir de a 1 los elementos de res_temp
-    for (int i = 0; i < res_temp.size(); i++){
-        cout << res_temp[i] + 1 << " ";
+    //Imprimir tamaño de res
+    cout << res.size() << endl;
+    //Imprimir de a 1 los elementos de res
+    for (int i = 0; i < res.size(); i++){
+        cout << res[i] + 1 << " ";
     }
     cout << endl;
 
